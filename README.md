@@ -27,13 +27,16 @@ ldconfig
 ## Parameters
 The block takes 4 parameters:
 samp_rate - The current flowgraph stream flow rate (used to calculate transitions/sec)
+
 valid_min - Sometimes noise is picked up as a transition, once a reasonable range is 
 	    visible, valid_min can be used to filter out symbol rates below this threshold.
 	    The default value is 0.
+
 valid_max - Like valid_min but for a maximum rate.  Sometimes a quick spike in noise is
 	    detected as a quick instantaneous symbol rate.  This value filters out those
 	    high-frequency spikes.  Setting this value to zero (the default) disables
 	    this filtering.
+
 Log Rates - If enabled, will write rates to stdout.
 
 NOTES: 
