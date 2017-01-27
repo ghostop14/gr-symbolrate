@@ -9,7 +9,8 @@ high number of transmissions to aid in clock recovery, in general symbol rate wi
 rate when combined with a "valid_min" parameter discussed below.
 
 ## Building
-Build is standard:
+Build is pretty standard:
+
 mkdir build
 
 cd build
