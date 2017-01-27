@@ -1,0 +1,51 @@
+<block>
+  <name>Symbolrate</name>
+  <key>symbolrate_symbolrate</key>
+  <category>[SYMBOLRATE]</category>
+  <import>import symbolrate</import>
+  <make>symbolrate.symbolrate($samp_rate,$valid_min,$valid_max,$log_rates)</make>
+  <param>
+          <name>Sample Rate</name>
+          <key>samp_rate</key>
+          <value>samp_rate</value>
+          <type>float</type>
+  </param>
+  <param>
+          <name>Valid Min</name>
+          <key>valid_min</key>
+          <value>0.0</value>
+          <type>float</type>
+  </param>
+  <param>
+          <name>Valid Max</name>
+          <key>valid_max</key>
+          <value>0.0</value>
+          <type>float</type>
+  </param>
+  <param>
+          <name>Log Rates</name>
+          <key>log_rates</key>
+          <value>False</value>
+          <type>enum</type>
+          <option>
+                  <name>Yes</name>
+                  <key>True</key>
+          </option>
+          <option>
+                  <name>No</name>
+                  <key>False</key>
+          </option>
+  </param>
+  <sink>
+    <name>in</name>
+    <type>float</type>
+  </sink>
+  <source>
+    <name>out</name>
+    <type>float</type>
+  </source>
+  <source>
+    <name>avg</name>
+    <type>float</type>
+  </source>
+</block>
