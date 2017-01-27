@@ -42,6 +42,9 @@ namespace gr {
     float lastSymbolRate = 0.0f;
     bool lastSymbol = false;  // Used a boolean so I can NOT it to flip it.
 
+    float long_average = 0.0f;
+    unsigned long long_avg_samples = 0;
+
      public:
       symbolrate_impl(float samp_rate, float valid_min, float valid_max, bool logRates);
       ~symbolrate_impl();

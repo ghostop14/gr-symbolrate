@@ -41,11 +41,15 @@
     <type>float</type>
   </sink>
   <source>
-    <name>out</name>
+    <name>inst_rate</name>
     <type>float</type>
   </source>
   <source>
-    <name>avg</name>
+    <name>short_avg</name>
+    <type>float</type>
+  </source>
+  <source>
+    <name>full_avg</name>
     <type>float</type>
   </source>
 </block>

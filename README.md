@@ -29,9 +29,8 @@ Log Rates - If enabled, will write rates to stdout.
 
 NOTES: 
 For best results in feeding the binary slicer, watch your filters and cutoffs.  If the slope continues too wide
-past your cutoff, it could make the symbol look "faster" than it is.
-For best results feeding a clock recovery MM block for runtime, take the average values written out and average them.
-Then add 2% as the initial starting point for the MM block.  This accounts in some part for the slicer cutoff.
+past your cutoff, it could make the symbol look "faster" than it is, which may cause garbage to come out of
+a clock recovery block.
 
 Output:
 out - current symbol/transition rate.

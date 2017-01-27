@@ -42,7 +42,7 @@ namespace gr {
     symbolrate_impl::symbolrate_impl(float samp_rate, float valid_min, float valid_max,bool logRates)
       : gr::block("symbolrate",
               gr::io_signature::make(1, 1, sizeof(float)), // input array
-              gr::io_signature::make(2, 2, sizeof(float))), // output array
+              gr::io_signature::make(3, 3, sizeof(float))), // output array
               d_samp_rate(samp_rate),
               d_valid_min(valid_min),
               d_valid_max(valid_max),
@@ -74,12 +74,14 @@ namespace gr {
       // moved to 2 channels out.
       int inst_channel = 0;
       int avg_channel = 1;
+      int long_avg_channel = 2;
       float **out = (float **)&output_items[0];
       bool curSymbol;
 
       int i;
       unsigned long nAvgSymbols = 0;
       double symbolRateTotal = 0.0;
+      float symbol_slope_correction = 1.02; // adjust 2% error due to binary slicer.
 
       // Note: we have sample rate as d_samp_rate.  So 1 sample occurs at 1/d_samp_rate s
       for (i=0;i<noutput_items;i++) {
@@ -126,7 +128,7 @@ namespace gr {
               symbolRateTotal += lastSymbolRate;
               nAvgSymbols++;
 
-              out[avg_channel][i] = (float)(symbolRateTotal / (float)nAvgSymbols);
+              out[avg_channel][i] = (float)(symbolRateTotal / (float)nAvgSymbols) * symbol_slope_correction;
           }
           else {
               out[avg_channel][i] = 0.0;
@@ -153,20 +155,32 @@ namespace gr {
                   lastAvg = out[avg_channel][i];
                   bGotTransition = true;
 
+                  // Calculate new long-term average.
+                  // track how many samples are included so new values
+                  // are not weighted heavier than originals.
+                  long_average = (float)long_avg_samples*long_average + lastAvg;
+                  long_avg_samples++;
+                  long_average = long_average / (float)long_avg_samples;
+
                   if (bLogRates) {
                       std::cout << "Symbol Transition Rate: " << lastAvg << "\n";
                   }
+
+
               }
               else {
                   out[avg_channel][i] = lastAvg;
               }
-
-
           }
           else {
               lastAvg = 0.0;
               bGotTransition = false;
           }
+
+          // yes, doing this in a reverse loop isn't the right place,
+          // but I didn't want the routine overhead of looping again,
+          // and over time this should stabilize anyway.
+          out[long_avg_channel][i] = long_average;
       }
 
       // Do <+signal processing+>

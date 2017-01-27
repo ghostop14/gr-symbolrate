@@ -3380,7 +3380,7 @@ from raw IQ data.</value>
     </param>
     <param>
       <key>label1</key>
-      <value>Inst</value>
+      <value>Inst Rate</value>
     </param>
     <param>
       <key>marker1</key>
@@ -3428,7 +3428,7 @@ from raw IQ data.</value>
     </param>
     <param>
       <key>label2</key>
-      <value>Average</value>
+      <value>Short Avg</value>
     </param>
     <param>
       <key>marker2</key>
@@ -3452,7 +3452,7 @@ from raw IQ data.</value>
     </param>
     <param>
       <key>label3</key>
-      <value></value>
+      <value>Long Avg</value>
     </param>
     <param>
       <key>marker3</key>
@@ -3616,7 +3616,7 @@ from raw IQ data.</value>
     </param>
     <param>
       <key>nconnections</key>
-      <value>2</value>
+      <value>3</value>
     </param>
     <param>
       <key>size</key>
@@ -4947,13 +4947,19 @@ from raw IQ data.</value>
   <connection>
     <source_block_id>symbolrate_symbolrate_0</source_block_id>
     <sink_block_id>qtgui_time_sink_x_1</sink_block_id>
-    <source_key>1</source_key>
-    <sink_key>1</sink_key>
+    <source_key>2</source_key>
+    <sink_key>2</sink_key>
   </connection>
   <connection>
     <source_block_id>symbolrate_symbolrate_0</source_block_id>
     <sink_block_id>qtgui_time_sink_x_1</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>symbolrate_symbolrate_0</source_block_id>
+    <sink_block_id>qtgui_time_sink_x_1</sink_block_id>
+    <source_key>1</source_key>
+    <sink_key>1</sink_key>
   </connection>
 </flow_graph>
