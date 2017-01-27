@@ -8,14 +8,22 @@ be detected as a single symbol/transition, given the digital communications goal
 high number of transmissions to aid in clock recovery, in general symbol rate will be close to transition
 rate when combined with a "valid_min" parameter discussed below.
 
+## Building
 Build is standard:
 mkdir build
+
 cd build
+
 cmake ..
+
 make
+
 make install
+
 ldconfig
 
+
+## Parameters
 The block takes 4 parameters:
 samp_rate - The current flowgraph stream flow rate (used to calculate transitions/sec)
 valid_min - Sometimes noise is picked up as a transition, once a reasonable range is 
@@ -32,8 +40,10 @@ For best results in feeding the binary slicer, watch your filters and cutoffs.  
 past your cutoff, it could make the symbol look "faster" than it is, which may cause garbage to come out of
 a clock recovery block.
 
-Output:
+## Output streams
 inst_rate - current symbol/transition rate.
+
 short avg - average symbol rate for current detected transmission sequence.
+
 long avg - long-term running rate.
 
