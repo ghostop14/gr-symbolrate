@@ -33,7 +33,7 @@ past your cutoff, it could make the symbol look "faster" than it is, which may c
 a clock recovery block.
 
 Output:
-out - current symbol/transition rate.
-avg - average symbol rate for current detected transmission sequence.
-
+inst_rate - current symbol/transition rate.
+short avg - average symbol rate for current detected transmission sequence.
+long avg - long-term running rate.
 
