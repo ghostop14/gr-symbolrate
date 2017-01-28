@@ -34,7 +34,7 @@ threshold values in the symbol rate time sink.
 Also, the valid_min and valid_max parameters discussed below should be leveraged to get the most accurate
 results.  Once you start to see an average form, remember that back-to-back 1's or 0's will show up as 
 transitions at 1/2 the actual rate.  So once you see the average forming, it's recommended that you set 
-the valid_min to about 0.7*long_avg and the valid_max at 1.3*long_avg.  This will act like a filter on the 
+the valid_min to about 0.7 x long_avg and the valid_max at 1.3 x long_avg.  This will act like a filter on the 
 results and help narrow in on a more accurate average the next pass.
 
 If you're feeding the grc with an IQ file and you put it on repeat, remember that as it trails off the end 
