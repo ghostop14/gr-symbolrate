@@ -23,6 +23,25 @@ make install
 
 ldconfig
 
+## Recommendations for best results
+In the examples directory are flowgraphs for ASK/OOK, FSK, and BPSK.  Each process does involve initial
+low-pass filters and some power squelch to eliminate initial noise.  Note that the filters are tuned to
+the ballpark of the potential input rates so if you copy them as a starting point make sure you adjust
+the filters appropriately for your input signal.  The ASK grc was for a 2970 sps signal, the FSK for a 
+3975 sps signal, and the BPSK for BPSK31 at 31.25 sps.  You'll also need to adjust the y axis range and 
+threshold values in the symbol rate time sink.
+
+Also, the valid_min and valid_max parameters discussed below should be leveraged to get the most accurate
+results.  Once you start to see an average form, remember that back-to-back 1's or 0's will show up as 
+transitions at 1/2 the actual rate.  So once you see the average forming, it's recommended that you set 
+the valid_min to about 0.7*long_avg and the valid_max at 1.3*long_avg.  This will act like a filter on the 
+results and help narrow in on a more accurate average the next pass.
+
+If you're feeding the grc with an IQ file and you put it on repeat, remember that as it trails off the end 
+of one file playback into the beginning of the next, you can get an unrealistic symbol transition (too fast 
+or too slow).  Again, setting the valid_min and valid_max will help, but you may want to consider the 
+gr-filerepeater OOT module and set a repeat delay of 500 - 1000 ms.  This would result in any spurious transition 
+showing up as 1-2 Hz which can be filtered with a valid_min say greater than 10.
 
 ## Parameters
 The block takes 4 parameters:
