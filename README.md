@@ -62,6 +62,9 @@ transitions at 1/2 the actual rate.  So once you see the average forming, it's r
 the valid_min to about 0.7 x long_avg and the valid_max at 1.3 x long_avg.  In general 25-30% deviations
 work well.  This will act like a filter on the results and help narrow in on a more accurate average the next pass.
 
+Once you think you have good symbols out, you can also use the byte_receiver.py script in the examples directory
+to print the bits out.  The grc.bitprinter.py example script does the same thing for saved binary files.
+
 If you're feeding the grc with an IQ file and you put it on repeat, remember that as it trails off the end 
 of one file playback into the beginning of the next, you can get an unrealistic symbol transition (too fast 
 or too slow).  Again, setting the valid_min and valid_max will help, but you may want to consider the 
