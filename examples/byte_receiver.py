@@ -2,9 +2,24 @@
 
 import socket
 from timeit import default_timer as timer
+import argparse
 
+parser = argparse.ArgumentParser(description='Print bits or bytes streamed from gnuradio UDP sink.')
+parser.add_argument('-p', '--port', help='local port', type=int, default=6543)
+parser.add_argument('-A', '--accesscode', help='Require access code to mark start of packet', action='store_true', default=False)
+parser.add_argument('-a', '--anyip', help='accept data from any ip, not just localhost', action='store_true', default=False)
+parser.add_argument('-b', '--bytes', help='Print bytes rather than bits', action='store_true', default=False)
+args = parser.parse_args()
+
+# Socket parameters
+udpport=args.port
+if args.anyip:
+    listen_ip='127.0.0.1'
+else:
+    listen_ip='127.0.0.1'
 # If you set this to false, it'll dump everything.
-checkAccessCode=True
+checkAccessCode=args.accesscode
+printBytes=args.bytes
 
 inPacket=False
 AccessCode="1010101010101010"
@@ -27,13 +42,37 @@ maxTimeWithoutAC=1  # in seconds
 lastEndOfPacket=timer()
 
 buffer=''
+printBuffer=''  # Used if converting bits to bytes
 
+def PrintData(dataToPrint, ForceLastByte=False):
+    global printBytes
+    global printBuffer
+    
+    if printBytes:
+        printBuffer += dataToPrint
+        
+        if ForceLastByte:
+            while (len(printBuffer)%8 >0):
+                printBuffer +='0'
+            
+        # convert every 8 bits to bytes.  If we don't have a full byte, store it.
+        while len(printBuffer) >= 8:
+            bits=printBuffer[0:8]
+            byteVal=int(bits, 2)
+            print(hex(byteVal), end='')
+            printBuffer=printBuffer[8:]
+    else:
+        # Just print the bits as they come in.
+        if len(dataToPrint) > 0:
+            print(dataToPrint, end='')
+    
 def ProcessBuffer():
     global inPacket
     global AccessCode
     global syncword
     global deadDetectionSequence
     global buffer
+    global printBuffer
     global maxTimeWithoutAC
     global lastEndOfPacket
     
@@ -53,6 +92,7 @@ def ProcessBuffer():
             
             if posAC >= 0:
                 # strip off leaders
+                PrintData('', True)
                 buffer=buffer[posAC:]
                 inPacket=True
                 print('\n<Packet Detected>')
@@ -63,6 +103,10 @@ def ProcessBuffer():
         # Now if the packet ends mid-stream, let's get rid of that.
         posDeadSpace=buffer.find(deadDetectionSequence)
         if posDeadSpace >=0:
+            if inPacket:
+                # Transitioning from in to not in packet
+                lastEndOfPacket=timer()
+                
             if posDeadSpace==0:
                 # dump all dead space, which could clear the buffer.  In any case let the next cycle happen to fill the buffer with more data
                 buffer=buffer.lstrip('0')
@@ -73,10 +117,9 @@ def ProcessBuffer():
             else:
                 # Now what if it's in the middle?  Print what we have up till then, remove the dead space, then save the rest for the next cycle
                 if inPacket:
-                    print(buffer[0:posDeadSpace], end='')
+                    PrintData(buffer[0:posDeadSpace])
                     buffer=buffer[posDeadSpace+len(deadDetectionSequence):]
                     buffer=buffer.lstrip('0')  # If the zero's were longer than dead space, remove the extras
-                    lastEndOfPacket=timer()
                     inPacket=False
                     
      
@@ -85,11 +128,11 @@ def ProcessBuffer():
             
             if matchingChars==0:
                 # Have access code, but haven't found dead space yet so print what we have and flush the buffer
-                print(buffer, end='')
+                PrintData(buffer, True)
                 buffer=''
             else:
                 tmpBuff=buffer[0:len(buffer)-matchingChars]
-                print(tmpBuff, end='')
+                PrintData(tmpBuff)
                 buffer=buffer[len(buffer)-matchingChars:]
         
         # Check if there's another packet starting.  If so keep processing.
@@ -98,6 +141,8 @@ def ProcessBuffer():
 
         if (not inPacket) and ((timer()-lastEndOfPacket)>maxTimeWithoutAC):
             buffer=''
+            # Force print buffer flush if in byte mode
+            PrintData('', True)
 
 def MayEndWithDeadCode():        
     if len(deadDetectionSequence)==0:
@@ -122,11 +167,8 @@ def MayEndWithDeadCode():
     return MatchingChars
     
     
-# Socket parameters
-udpport=6543
-listen_ip='127.0.0.1'
 server_address = (listen_ip, udpport)
-print('starting up listener on ',server_address,' on port ', udpport)
+print('starting up listener on ',listen_ip,' on port ', udpport)
 
 # Create a TCP/IP socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -151,24 +193,32 @@ try:
             exit(0)
         except:
             data=''
-            
+         
         if data:
+            bitBuffer=''   
             for byte in data:
+                newPacket=False
                 curBit=''
                 if byte== 0:
                     curBit='0'
                 elif byte== 1:
                     curBit='1'
                 elif byte== 2:  # If using access code detection, new packet would have a 2nd bit set
-                    curBit='<New Packet>0'
+                    newPacket=True
+                    curBit='0'
                 elif byte==3:
-                    curBit='<New Packet>1'
+                    newPacket=True
+                    curBit='1'
 
-                if checkAccessCode and len(AccessCode)>0:
-                    buffer += curBit
-                    ProcessBuffer()
+                if not checkAccessCode:
+                    if newPacket:
+                        print("\n<New Packet>")
+                    PrintData(curBit)
                 else:
-                    print(curBit,end="")
+                    bitBuffer += curBit
+            if checkAccessCode:
+                buffer += bitBuffer
+                ProcessBuffer()
 except KeyboardInterrupt:
     sock.close()
     print("Exiting.")
