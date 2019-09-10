@@ -18,5 +18,5 @@
 # Boston, MA 02110-1301, USA.
 
 install(FILES
-    symbolrate_symbolrate.xml DESTINATION share/gnuradio/grc/blocks
+    symbolrate_symbolrate.block.yml DESTINATION share/gnuradio/grc/blocks
 )
