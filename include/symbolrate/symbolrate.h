@@ -36,7 +36,7 @@ namespace gr {
     class SYMBOLRATE_API symbolrate : virtual public gr::block
     {
      public:
-      typedef boost::shared_ptr<symbolrate> sptr;
+      typedef std::shared_ptr<symbolrate> sptr;
 
       /*!
        * \brief Return a shared_ptr to a new instance of symbolrate::symbolrate.
