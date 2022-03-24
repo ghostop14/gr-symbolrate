@@ -1680,7 +1680,7 @@ symbols_per_sec/2*1.1</value>
     </param>
     <param>
       <key>wintype</key>
-      <value>firdes.WIN_BLACKMAN_hARRIS</value>
+      <value>window.WIN_BLACKMAN_hARRIS</value>
     </param>
     <param>
       <key>label</key>
@@ -3239,7 +3239,7 @@ symbols_per_sec/2*1.1</value>
     </param>
     <param>
       <key>wintype</key>
-      <value>firdes.WIN_BLACKMAN_hARRIS</value>
+      <value>window.WIN_BLACKMAN_hARRIS</value>
     </param>
   </block>
   <block>

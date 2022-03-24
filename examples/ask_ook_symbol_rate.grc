@@ -1405,7 +1405,7 @@ from raw IQ data.</value>
     </param>
     <param>
       <key>win</key>
-      <value>firdes.WIN_BLACKMAN</value>
+      <value>window.WIN_BLACKMAN</value>
     </param>
   </block>
   <block>
@@ -1843,7 +1843,7 @@ from raw IQ data.</value>
     </param>
     <param>
       <key>wintype</key>
-      <value>firdes.WIN_BLACKMAN_hARRIS</value>
+      <value>window.WIN_BLACKMAN_hARRIS</value>
     </param>
     <param>
       <key>label</key>
@@ -4128,7 +4128,7 @@ from raw IQ data.</value>
     </param>
     <param>
       <key>wintype</key>
-      <value>firdes.WIN_BLACKMAN_hARRIS</value>
+      <value>window.WIN_BLACKMAN_hARRIS</value>
     </param>
   </block>
   <block>
